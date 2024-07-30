@@ -157,6 +157,10 @@ struct default_reader{
   T operator()(const std::string &str){
     return detail::lexical_cast<T>(str);
   }
+
+  std::string description(){
+        return "";
+    };
 };
 
 template <class T>
@@ -167,6 +171,10 @@ struct range_reader{
     if (!(ret>=low && ret<=high)) throw cmdline::cmdline_error("range_error");
     return ret;
   }
+
+  std::string description(){
+    return "{"+ std::to_string(low) + "..." + std::to_string(high) + "}";
+  };
 private:
   T low, high;
 };
@@ -187,6 +195,16 @@ struct oneof_reader{
     return ret;
   }
   void add(const T &v){ alt.push_back(v); }
+  std::string description(){
+    std::ostringstream oss;
+    oss << "{";
+    for(auto it = alt.begin(); it != alt.end(); it++){
+        oss << *it << ", ";
+    }
+    oss << "}";
+    return oss.str();
+  };
+
 private:
   std::vector<T> alt;
 };
@@ -689,6 +707,7 @@ private:
                                   const std::string &desc,
                                   F reader)
       : option_with_value<T>(name, short_name, need, def, desc), reader(reader){
+        this->desc.append(reader.description());
     }
 
   private:
