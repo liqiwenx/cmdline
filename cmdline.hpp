@@ -264,6 +264,12 @@ public:
     ftr=f;
   }
 
+  void notes(const std::string &n){
+    notes_=n;
+  }
+
+
+
   void set_program_name(const std::string &name){
     prog_name=name;
   }
@@ -495,6 +501,7 @@ public:
         oss<<' ';
       oss<<ordered[i]->description()<<std::endl;
     }
+    oss<<notes_<<std::endl;
     return oss.str();
   }
 
@@ -721,6 +728,7 @@ private:
   std::map<std::string, option_base*> options;
   std::vector<option_base*> ordered;
   std::string ftr;
+  std::string notes_;
 
   std::string prog_name;
   std::vector<std::string> others;
